@@ -8,10 +8,27 @@ const Shop = () => {
     const [selectedItems, setSelectedItems] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalShippingCharge, setTotalShippingCharge] = useState(0);
+    let cart = {};
     const clicked = (id, price, shippingCharge) => {
         setSelectedItems(selectedItems + 1);
         setTotalPrice(totalPrice + price);
         setTotalShippingCharge(totalShippingCharge + shippingCharge);
+        const storedCart = localStorage.getItem('cart');
+        if(storedCart){
+            cart = JSON.parse(storedCart);
+            if(cart[id]){
+                cart[id] = cart[id] + 1;
+            }
+            else{
+                cart[id] = 1;
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart))
+        }
+        else{
+            cart[id] = 1;
+            localStorage.setItem('cart', JSON.stringify(cart))
+        }
     }
     useEffect(() => {
         fetch('data.json')
