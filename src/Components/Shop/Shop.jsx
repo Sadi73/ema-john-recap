@@ -34,7 +34,25 @@ const Shop = () => {
         fetch('data.json')
             .then(res => res.json())
             .then(data => setProducts(data))
-    }, [])
+    }, []);
+
+    useEffect(()=>{
+        const savedCartStringified = localStorage.getItem('cart');
+        const savedCart = JSON.parse(savedCartStringified);
+        let total = 0;
+        if(savedCart)
+        {
+            
+            for(const id in savedCart){
+                console.log(id, savedCart[id]);
+                total = total + savedCart[id];
+            }
+
+            setSelectedItems(total);
+
+        }
+    },[products])
+    
     return (
         <div className='shop-container'>
             <div className='product-container'>
