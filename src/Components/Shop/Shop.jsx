@@ -6,13 +6,26 @@ import Summary from '../Summary/Summary';
 const Shop = () => {
     const [products, setProducts] = useState([]);
     const [cartAdded, setCartAdded] = useState([]);
-
+    let cart = {};
     const clicked = (productClicked) => {
-        console.log(productClicked);
-        console.log(cartAdded);
         setCartAdded([...cartAdded, productClicked]);
-        console.log(cartAdded);
-        
+        const savedCartStringified = localStorage.getItem('cart');
+        if (savedCartStringified) {
+            const cart = JSON.parse(savedCartStringified);
+            if (cart[productClicked.id]) {
+                cart[productClicked.id] = cart[productClicked.id] + 1;
+                localStorage.setItem('cart', JSON.stringify(cart));
+
+            }
+            else {
+                cart[productClicked.id] = 1;
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+        }
+        else {
+            cart[productClicked.id] = 1;
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
     }
     useEffect(() => {
         fetch('data.json')
@@ -20,7 +33,6 @@ const Shop = () => {
             .then(data => setProducts(data))
     }, []);
 
-    
     return (
         <div className='shop-container'>
             <div className='product-container'>

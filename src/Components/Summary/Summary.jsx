@@ -7,7 +7,7 @@ const Summary = (props) => {
     let totalShippingCharge = 0;
     let tax = 0;
     for(const item of props.cartAdded){
-        console.log(item.price);
+        // console.log(item.price);
         totalPrice = totalPrice + item.price;
         totalShippingCharge = totalShippingCharge + item.shipping;
         
