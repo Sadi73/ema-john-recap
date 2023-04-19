@@ -5,30 +5,14 @@ import Summary from '../Summary/Summary';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
-    const [selectedItems, setSelectedItems] = useState(0);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [totalShippingCharge, setTotalShippingCharge] = useState(0);
-    let cart = {};
-    const clicked = (id, price, shippingCharge) => {
-        setSelectedItems(selectedItems + 1);
-        setTotalPrice(totalPrice + price);
-        setTotalShippingCharge(totalShippingCharge + shippingCharge);
-        const storedCart = localStorage.getItem('cart');
-        if(storedCart){
-            cart = JSON.parse(storedCart);
-            if(cart[id]){
-                cart[id] = cart[id] + 1;
-            }
-            else{
-                cart[id] = 1;
-            }
-            
-            localStorage.setItem('cart', JSON.stringify(cart))
-        }
-        else{
-            cart[id] = 1;
-            localStorage.setItem('cart', JSON.stringify(cart))
-        }
+    const [cartAdded, setCartAdded] = useState([]);
+
+    const clicked = (productClicked) => {
+        console.log(productClicked);
+        console.log(cartAdded);
+        setCartAdded([...cartAdded, productClicked]);
+        console.log(cartAdded);
+        
     }
     useEffect(() => {
         fetch('data.json')
@@ -36,22 +20,6 @@ const Shop = () => {
             .then(data => setProducts(data))
     }, []);
 
-    useEffect(()=>{
-        const savedCartStringified = localStorage.getItem('cart');
-        const savedCart = JSON.parse(savedCartStringified);
-        let total = 0;
-        if(savedCart)
-        {
-            
-            for(const id in savedCart){
-                console.log(id, savedCart[id]);
-                total = total + savedCart[id];
-            }
-
-            setSelectedItems(total);
-
-        }
-    },[products])
     
     return (
         <div className='shop-container'>
@@ -61,7 +29,7 @@ const Shop = () => {
                 }
             </div>
             <div className='summary-container'>
-                <Summary selectedItems={selectedItems} totalPrice = {totalPrice} totalShippingCharge={totalShippingCharge} ></Summary>
+                <Summary cartAdded={cartAdded} ></Summary>
             </div>
 
         </div>
